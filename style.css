@@ -55,10 +55,21 @@ table {
   border: 1px black solid;
   border-collapse: collapse;
   margin-top: 10px;
+  font-size: 1.5rem;
+  text-align: center;
+  vertical-align: middle;
 }
 
 td,
 tr,
 th {
   border: 1px black solid;
+}
+
+tr > th:last-child {
+  width: 80px;
+}
+
+tr > button {
+  font-size: 0.8rem;
 }

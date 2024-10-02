@@ -1,3 +1,7 @@
+//create empty array
+const myLibrary = [];
+
+//constructor funtion to build new Book objects
 function Book(author, title, pages, read) {
   this.author = author;
   this.title = title;
@@ -6,64 +10,127 @@ function Book(author, title, pages, read) {
   this.addBookToLibrary();
 }
 
+//adding method to Book prototype so all instances of Book can share function to push Book to array.
 Book.prototype.addBookToLibrary = function () {
   myLibrary.push(this);
 };
 
-const myLibrary = [];
-
-const book1 = new Book('John Doe', 'A Good Book', '69 pages', 'Read');
-const book2 = new Book('Jane Doe', 'A Great Book', '100 pages', 'Not Read');
-const book3 = new Book('Bas Jansen', 'A Gezellig Book', '199 pages', 'Read');
-
+//function to display form when clicking button
 function openForm() {
   document.getElementById('formHeader').style.display = 'block';
 }
 
+//function to close form after submitting book
 function closeForm() {
   document.getElementById('formHeader').style.display = 'none';
 }
 
-function buildTable(array) {
-  const table = document.createElement('table'); //create empty table element
+//function to add new book to array
+function addToArray() {
+  const author = document.getElementById('author').value;
+  const title = document.getElementById('title').value;
+  const pages = document.getElementById('pages').value;
+  const read = document.getElementById('read').value;
 
-  const headerRow = document.createElement('tr');
+  //form validation; if one of the following are not present, alert and exit function
+  if (author === '' || title === '' || pages === '') {
+    alert('Please fill out all required fields: Author, Title, and Pages.');
+    return;
+  }
 
-  const headers = ['Author', 'Title', 'Pages', 'Read']; //array to list column headers
-  headers.forEach((headerText) => {
-    //loop through each header
-    const headerCell = document.createElement('th'); //create header cell and content
-    headerCell.textContent = headerText; //set text of header cell
-    headerRow.appendChild(headerCell); //append header to row
-  });
+  //creating a new instance of book, also includes pushing new book to current array
+  const newBook = new Book(author, title, pages, read);
 
-  table.appendChild(headerRow); //append header to table
+  //resetting the form to add a new book
+  document.getElementById('bookform').reset();
 
-  array.forEach((book) => {
-    //loop through each book
+  //run the build table function, take in array that includes new book
+  buildTable(myLibrary);
 
-    const row = document.createElement('tr'); //create table row tr
-
-    const authorCell = document.createElement('td'); //create author cell and the content
-    authorCell.textContent = book.author; //set text of cell to author
-    row.appendChild(authorCell); //append cell to row
-
-    const titleCell = document.createElement('td'); //create title cell and content
-    titleCell.textContent = book.title; //set text of cell to title
-    row.appendChild(titleCell); // append cell to row
-
-    const pagesCell = document.createElement('td'); //create pages cell and content
-    pagesCell.textContent = book.pages; //set text of cell to pages
-    row.appendChild(pagesCell); //append cell to row
-
-    const readCell = document.createElement('td'); //create read cell and content
-    readCell.textContent = book.read; //set text of cell to read
-    row.appendChild(readCell); //append cell to row
-
-    table.appendChild(row); //append row to table
-  });
-
-  document.getElementById('tableContainer').appendChild(table); //append full table to container element in html
+  //fun function to close form
+  closeForm();
 }
 
-buildTable(myLibrary); //run function
+//function to build table
+function buildTable(array) {
+  //Grab the table container
+  const tableContainer = document.getElementById('tableContainer');
+
+  //Clear the table if there is one
+  tableContainer.innerHTML = '';
+
+  //Create a blank table
+  const table = document.createElement('table');
+
+  //create a header row
+  const headerRow = document.createElement('tr');
+
+  //create array that lists rows of header
+  const headers = ['Author', 'Title', 'Pages', 'Read', 'Read Choice', 'Remove Book'];
+
+  //create header cells and append them to the header row
+  headers.forEach((headerText) => {
+    const headerCell = document.createElement('th');
+    headerCell.textContent = headerText;
+    headerRow.appendChild(headerCell);
+  });
+
+  //append the header row to the table
+  table.appendChild(headerRow);
+
+  //create an array that creates each book row
+  array.forEach((book, index) => {
+    const row = document.createElement('tr');
+
+    const authorCell = document.createElement('td');
+    authorCell.textContent = book.author;
+    row.appendChild(authorCell);
+
+    const titleCell = document.createElement('td');
+    titleCell.textContent = book.title;
+    row.appendChild(titleCell);
+
+    const pagesCell = document.createElement('td');
+    pagesCell.textContent = book.pages;
+    row.appendChild(pagesCell);
+
+    const readCell = document.createElement('td');
+    readCell.textContent = book.read;
+    row.appendChild(readCell);
+
+    const flipCell = document.createElement('td');
+    const flipButton = document.createElement('button');
+    flipButton.textContent = 'Flip Read';
+    flipCell.appendChild(flipButton);
+    flipButton.addEventListener('click', () => {
+      book.read = book.read === 'Read' ? 'Not Read' : 'Read';
+      buildTable(myLibrary);
+    });
+    row.appendChild(flipCell);
+
+    const cancelCell = document.createElement('td');
+    const removeButton = document.createElement('button');
+    removeButton.textContent = 'Remove';
+    removeButton.addEventListener('click', () => {
+      removeBook(index);
+    });
+    cancelCell.appendChild(removeButton);
+    row.appendChild(cancelCell);
+
+    table.appendChild(row);
+  });
+
+  tableContainer.appendChild(table);
+}
+
+function removeBook(index) {
+  myLibrary.splice(index, 1);
+  buildTable(myLibrary);
+}
+
+buildTable(myLibrary);
+
+document.getElementById('bookform').addEventListener('submit', function (event) {
+  event.preventDefault();
+  addToArray();
+});

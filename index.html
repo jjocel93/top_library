@@ -21,12 +21,12 @@
           <input type="text" class="inputbox" name="pages" id="pages" /> <br /><br />
           <label for="read">Read?:</label>
           <select id="read" name="read" form="bookform">
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
+            <option value="Read">Yes</option>
+            <option value="Not Read">No</option>
           </select>
           <br />
           <br />
-          <button type="submit" class="btn" onclick="closeForm()">Add Book</button>
+          <button type="submit" class="btn" onclick="closeForm()" onclick="addToArray()">Add Book to Table</button>
         </form>
       </div>
       <div class="tableContainer" id="tableContainer"></div>
