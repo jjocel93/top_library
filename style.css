@@ -40,3 +40,25 @@ h6 {
 :root {
   --system-ui: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
+
+label {
+  display: inline-block;
+  width: 75px; /* Adjust this width based on your label size */
+  text-align: left;
+}
+
+#formHeader {
+  display: none;
+}
+
+table {
+  border: 1px black solid;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+td,
+tr,
+th {
+  border: 1px black solid;
+}
